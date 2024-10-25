@@ -15,7 +15,7 @@ var solidity = require('@ethersproject/solidity');
 var contracts = require('@ethersproject/contracts');
 var networks = require('@ethersproject/networks');
 var providers = require('@ethersproject/providers');
-var IDynastyPair = _interopDefault(require('@dynastyswap-libs/dynastyswap-core/dynasty/IDynastyPair.json'));
+var IPancakePair = _interopDefault(require('@dynastyswap-libs/dynastyswap-core/artifacts/IPancakePair.json'));
 
 var _SOLIDITY_TYPE_MAXIMA;
 
@@ -1552,7 +1552,7 @@ var Fetcher = /*#__PURE__*/function () {
       if (provider === undefined) provider = providers.getDefaultProvider(networks.getNetwork(tokenA.chainId));
       !(tokenA.chainId === tokenB.chainId) ? "development" !== "production" ? invariant(false, 'CHAIN_ID') : invariant(false) : void 0;
       var address = Pair.getAddress(tokenA, tokenB);
-      return Promise.resolve(new contracts.Contract(address, IDynastyPair.abi, provider).getReserves()).then(function (_ref) {
+      return Promise.resolve(new contracts.Contract(address, IPancakePair.abi, provider).getReserves()).then(function (_ref) {
         var reserves0 = _ref[0],
             reserves1 = _ref[1];
         var balances = tokenA.sortsBefore(tokenB) ? [reserves0, reserves1] : [reserves1, reserves0];
