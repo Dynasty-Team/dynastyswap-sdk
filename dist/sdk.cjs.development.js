@@ -15,52 +15,13 @@ var solidity = require('@ethersproject/solidity');
 var contracts = require('@ethersproject/contracts');
 var networks = require('@ethersproject/networks');
 var providers = require('@ethersproject/providers');
-var IPancakePair = _interopDefault(require('@dynastyswap-libs/dynastyswap-core/artifacts/IPancakePair.json'));
-
-var addresses = {
-	"111": {
-	DynastyFactory: "0x4746b70d12102E21784c1B48Aa306bd3f06CD3b1",
-	PancakeFactory_Init_Code_Hash: "0x06f52364610fecab86b0dfce3d044ef5975cf7636a065775f8f285136f2ebaed",
-	owner: "0xF04B4bDB9da8324444fE289A71096E718c872DF4",
-	Multicall2: "0x9829509cc1C745188059F06bd4c79EDa927744aD",
-	DynastyToken: "0x73E199C7AED3485B74e5A63f3A204407CE44A825",
-	AdaToken: "0x6292D721D00bDdAf683E1e64E4fCc9588c95398D",
-	WDNY: "0x9b47Eeede18E6403F41ebF1D7EF8C36377de0E2B",
-	TE6: "0x98359493d0419BAa57c30A0E00b804424ED39FF2",
-	TE9: "0xB10C3C66b47D29B31cE8C4D3adC58bd71b5fdB4B",
-	TE12: "0x275061Ab6D4e2E690d44E6547E531a6E52A65Dea",
-	TE18: "0x8D3CDd130Bf9eC748723D4CeD32cB57ce24d4bd7",
-	DynastyStake: "0x121f3675132d73640992839Fb5B9770c75EeE78B",
-	Timelock: "0x3aB94B0e99d911a3EdB08eEb3ebBAe36876A9595",
-	DynastyFarm: "0x2F1a6cbE5844516fdFA78f9a17F72cD60dd042b7",
-	DynastyVault: "0x9BC96b7F9E48F7783C0bec407F002F1D4670dAEa",
-	VaultOwner: "0xaac391718A612248af5e73D41191445A4B1aEF01",
-	DynastyStakingFactory: "0xc6D5bc175C4513a1a8bC1Ae69f6943061adF37bF",
-	DynastyRouter: "0x677A5d74D9C99EB7C4C09046f29d9A452a3AD184"
-},
-	"11155111": {
-	owner: "0xF04B4bDB9da8324444fE289A71096E718c872DF4",
-	Multicall2: "0x9829509cc1C745188059F06bd4c79EDa927744aD",
-	DynastyToken: "0x72eB7CA07399Ec402c5b7aa6A65752B6A1Dc0C27",
-	AdaToken: "0x3611Fbfb06ffBcEf9Afb210f6Ace86742e6c14a4",
-	WDNY: "0x3656F3Db7249ee7FbF2e706D68729704E7017046",
-	DynastyStake: "0xCAd594BfF4b18bDdea33e3E1E66627AA3001cB72",
-	Timelock: "0xA456F70cfb1F3A7DE58D585F35194fd36f192167",
-	DynastyFarm: "0xB98BbAF45bCFbdB37690c7d021437BE15a562209",
-	DynastyVault: "0x5AB61B5002b22Ad10F9E989D104EF19C2cB64269",
-	VaultOwner: "0x8a22FCb01AEfD536f68cb1af174CD3B79b184325",
-	DynastyStakingFactory: "0x6b563B53cB91A3f3cbC815f8d988dDe1A70126Fc",
-	DynastyFactory: "0xaDF4E193b98916273cf1d076f327Fca79fB22477",
-	PancakeFactory_Init_Code_Hash: "0x06f52364610fecab86b0dfce3d044ef5975cf7636a065775f8f285136f2ebaed",
-	DynastyRouter: "0xDFc3D08A7d3B6e1131192aF971b3CAE83004D534"
-}
-};
+var IDynastyPair = _interopDefault(require('@dynastyswap-libs/dynastyswap-core/dynasty/IDynastyPair.json'));
 
 var _SOLIDITY_TYPE_MAXIMA;
 
 (function (ChainId) {
   ChainId[ChainId["MAINNET"] = 11155111] = "MAINNET";
-  ChainId[ChainId["TESTNET"] = 111] = "TESTNET";
+  ChainId[ChainId["BSCTESTNET"] = 97] = "BSCTESTNET";
 })(exports.ChainId || (exports.ChainId = {}));
 
 (function (TradeType) {
@@ -74,9 +35,8 @@ var _SOLIDITY_TYPE_MAXIMA;
   Rounding[Rounding["ROUND_UP"] = 2] = "ROUND_UP";
 })(exports.Rounding || (exports.Rounding = {}));
 
-var DEFAULT_CHAIN_ID = exports.ChainId.MAINNET;
-var FACTORY_ADDRESS = addresses[DEFAULT_CHAIN_ID].DynastyFactory;
-var INIT_CODE_HASH = addresses[DEFAULT_CHAIN_ID].PancakeFactory_Init_Code_Hash;
+var FACTORY_ADDRESS = '0x18ACC9a58CAA803a703BA6F586E56ae95859eC0e';
+var INIT_CODE_HASH = '0x1439beee8cb41ed12b10c3050d349c87813fa3ef282428b3dd1e3e8d76ade996';
 var MINIMUM_LIQUIDITY = /*#__PURE__*/JSBI.BigInt(1000); // exports for internal consumption
 
 var ZERO = /*#__PURE__*/JSBI.BigInt(0);
@@ -409,7 +369,7 @@ function Currency(decimals, symbol, name) {
  * The only instance of the base class `Currency`.
  */
 
-Currency.ETHER = /*#__PURE__*/new Currency(18, 'VLX', 'Velas');
+Currency.ETHER = /*#__PURE__*/new Currency(18, 'BNB', 'Binance');
 var ETHER = Currency.ETHER;
 
 var _WETH;
@@ -420,13 +380,12 @@ var _WETH;
 var Token = /*#__PURE__*/function (_Currency) {
   _inheritsLoose(Token, _Currency);
 
-  function Token(chainId, address, decimals, symbol, name, projectLink) {
+  function Token(chainId, address, decimals, symbol, name) {
     var _this;
 
     _this = _Currency.call(this, decimals, symbol, name) || this;
     _this.chainId = chainId;
     _this.address = validateAndParseAddress(address);
-    _this.projectLink = projectLink;
     return _this;
   }
   /**
@@ -476,7 +435,7 @@ function currencyEquals(currencyA, currencyB) {
     return currencyA === currencyB;
   }
 }
-var WETH = (_WETH = {}, _WETH[exports.ChainId.MAINNET] = /*#__PURE__*/new Token(exports.ChainId.MAINNET, addresses[exports.ChainId.MAINNET].WDNY, 18, 'WDNY', 'Wrapped DNY', 'https://dynastycoin.io/'), _WETH[exports.ChainId.TESTNET] = /*#__PURE__*/new Token(exports.ChainId.TESTNET, addresses[exports.ChainId.TESTNET].WDNY, 18, 'WDNY', 'Wrapped DNY', 'https://dynastycoin.io/'), _WETH);
+var WETH = (_WETH = {}, _WETH[exports.ChainId.MAINNET] = /*#__PURE__*/new Token(exports.ChainId.MAINNET, '0x3656F3Db7249ee7FbF2e706D68729704E7017046', 18, 'WDNY', 'Wrapped DNY'), _WETH[exports.ChainId.BSCTESTNET] = /*#__PURE__*/new Token(exports.ChainId.BSCTESTNET, '0xaE8E19eFB41e7b96815649A6a60785e1fbA84C1e', 18, 'WBNB', 'Wrapped BNB'), _WETH);
 
 var _toSignificantRoundin, _toFixedRounding;
 var Decimal = /*#__PURE__*/toFormat(_Decimal);
@@ -799,7 +758,7 @@ var Pair = /*#__PURE__*/function () {
   function Pair(tokenAmountA, tokenAmountB) {
     var tokenAmounts = tokenAmountA.token.sortsBefore(tokenAmountB.token) // does safety checks
     ? [tokenAmountA, tokenAmountB] : [tokenAmountB, tokenAmountA];
-    this.liquidityToken = new Token(tokenAmounts[0].token.chainId, Pair.getAddress(tokenAmounts[0].token, tokenAmounts[1].token), 18, 'Dynasty-LP', 'Dynasty LPs');
+    this.liquidityToken = new Token(tokenAmounts[0].token.chainId, Pair.getAddress(tokenAmounts[0].token, tokenAmounts[1].token), 18, 'UNI-V2', 'Uniswap V2');
     this.tokenAmounts = tokenAmounts;
   }
 
@@ -1410,7 +1369,7 @@ function toHex(currencyAmount) {
 
 var ZERO_HEX = '0x0';
 /**
- * Represents the Pancake Router, and has static methods for helping execute trades.
+ * Represents the Uniswap V2 Router, and has static methods for helping execute trades.
  */
 
 var Router = /*#__PURE__*/function () {
@@ -1430,14 +1389,14 @@ var Router = /*#__PURE__*/function () {
     var etherOut = trade.outputAmount.currency === ETHER; // the router does not support both ether in and out
 
     !!(etherIn && etherOut) ?  invariant(false, 'ETHER_IN_OUT')  : void 0;
-    !(!('ttl' in options) || options.ttl > 0) ?  invariant(false, 'TTL')  : void 0;
+    !(options.ttl > 0) ?  invariant(false, 'TTL')  : void 0;
     var to = validateAndParseAddress(options.recipient);
     var amountIn = toHex(trade.maximumAmountIn(options.allowedSlippage));
     var amountOut = toHex(trade.minimumAmountOut(options.allowedSlippage));
     var path = trade.route.path.map(function (token) {
       return token.address;
     });
-    var deadline = 'ttl' in options ? "0x" + (Math.floor(new Date().getTime() / 1000) + options.ttl).toString(16) : "0x" + options.deadline.toString(16);
+    var deadline = "0x" + (Math.floor(new Date().getTime() / 1000) + options.ttl).toString(16);
     var useFeeOnTransfer = Boolean(options.feeOnTransfer);
     var methodName;
     var args;
@@ -1535,7 +1494,10 @@ var ERC20 = [
 ];
 
 var _TOKEN_DECIMALS_CACHE;
-var TOKEN_DECIMALS_CACHE = (_TOKEN_DECIMALS_CACHE = {}, _TOKEN_DECIMALS_CACHE[exports.ChainId.MAINNET] = {}, _TOKEN_DECIMALS_CACHE);
+var TOKEN_DECIMALS_CACHE = (_TOKEN_DECIMALS_CACHE = {}, _TOKEN_DECIMALS_CACHE[exports.ChainId.MAINNET] = {
+  '0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A': 9 // DGD
+
+}, _TOKEN_DECIMALS_CACHE);
 /**
  * Contains methods for constructing instances of pairs and tokens from on-chain data.
  */
@@ -1590,7 +1552,7 @@ var Fetcher = /*#__PURE__*/function () {
       if (provider === undefined) provider = providers.getDefaultProvider(networks.getNetwork(tokenA.chainId));
       !(tokenA.chainId === tokenB.chainId) ? "development" !== "production" ? invariant(false, 'CHAIN_ID') : invariant(false) : void 0;
       var address = Pair.getAddress(tokenA, tokenB);
-      return Promise.resolve(new contracts.Contract(address, IPancakePair.abi, provider).getReserves()).then(function (_ref) {
+      return Promise.resolve(new contracts.Contract(address, IDynastyPair.abi, provider).getReserves()).then(function (_ref) {
         var reserves0 = _ref[0],
             reserves1 = _ref[1];
         var balances = tokenA.sortsBefore(tokenB) ? [reserves0, reserves1] : [reserves1, reserves0];

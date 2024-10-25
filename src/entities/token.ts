@@ -2,7 +2,6 @@ import invariant from 'tiny-invariant'
 import { ChainId } from '../constants'
 import { validateAndParseAddress } from '../utils'
 import { Currency } from './currency'
-import addresses from '../addresses.json'
 
 /**
  * Represents an ERC20 token with a unique address and some metadata.
@@ -10,20 +9,11 @@ import addresses from '../addresses.json'
 export class Token extends Currency {
   public readonly chainId: ChainId
   public readonly address: string
-  public readonly projectLink?: string
 
-  public constructor(
-    chainId: ChainId,
-    address: string,
-    decimals: number,
-    symbol?: string,
-    name?: string,
-    projectLink?: string
-  ) {
+  public constructor(chainId: ChainId, address: string, decimals: number, symbol?: string, name?: string) {
     super(decimals, symbol, name)
     this.chainId = chainId
     this.address = validateAndParseAddress(address)
-    this.projectLink = projectLink
   }
 
   /**
@@ -69,18 +59,16 @@ export function currencyEquals(currencyA: Currency, currencyB: Currency): boolea
 export const WETH = {
   [ChainId.MAINNET]: new Token(
     ChainId.MAINNET,
-    addresses[ChainId.MAINNET].WDNY,
+    '0x3656F3Db7249ee7FbF2e706D68729704E7017046',
     18,
     'WDNY',
-    'Wrapped DNY',
-    'https://dynastycoin.io/'
+    'Wrapped DNY'
   ),
-  [ChainId.TESTNET]: new Token(
-    ChainId.TESTNET,
-    addresses[ChainId.TESTNET].WDNY,
+  [ChainId.BSCTESTNET]: new Token(
+    ChainId.BSCTESTNET,
+    '0xaE8E19eFB41e7b96815649A6a60785e1fbA84C1e',
     18,
-    'WDNY',
-    'Wrapped DNY',
-    'https://dynastycoin.io/'
+    'WBNB',
+    'Wrapped BNB'
   )
 }

@@ -1,12 +1,11 @@
 import JSBI from 'jsbi'
-import addresses from './addresses.json'
 
 // exports for external consumption
 export type BigintIsh = JSBI | bigint | string
 
 export enum ChainId {
   MAINNET = 11155111,
-  TESTNET = 111
+  BSCTESTNET = 97
 }
 
 export enum TradeType {
@@ -20,11 +19,9 @@ export enum Rounding {
   ROUND_UP
 }
 
-export const DEFAULT_CHAIN_ID = ChainId.MAINNET
+export const FACTORY_ADDRESS = '0x18ACC9a58CAA803a703BA6F586E56ae95859eC0e'
 
-export const FACTORY_ADDRESS = addresses[DEFAULT_CHAIN_ID].DynastyFactory
-
-export const INIT_CODE_HASH = addresses[DEFAULT_CHAIN_ID].PancakeFactory_Init_Code_Hash
+export const INIT_CODE_HASH = '0x1439beee8cb41ed12b10c3050d349c87813fa3ef282428b3dd1e3e8d76ade996'
 
 export const MINIMUM_LIQUIDITY = JSBI.BigInt(1000)
 
